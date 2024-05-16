@@ -10,4 +10,11 @@ const userSchema = mongoose.Schema({
   role: {
     type: String,
   },
+  project: [String],
+  activeYn: {
+    type: Boolean,
+  },
 });
+
+const User = mongoose.model("User", userSchema);
+module.exports = User;
