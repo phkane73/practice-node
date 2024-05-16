@@ -21,3 +21,9 @@ exports.update = async (req, res) => {
   );
   return res.send({ message: "Updated user!" });
 };
+
+exports.search = async (req, res) => {
+  const searchParams = req.query;
+  const user = await User.find(searchParams);
+  return res.send(user);
+};
