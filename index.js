@@ -1,6 +1,7 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const router = require("./app/routes");
+require("dotenv").config();
 const mongoose = require("mongoose");
 const app = express();
 app.use(bodyParser.json());
@@ -11,10 +12,10 @@ router(app);
 async function startServer() {
   try {
     await mongoose.connect(
-      "mongodb+srv://phkane732002:OOIXmNoLOjQ50Fkj@practice.f9ubcid.mongodb.net/?retryWrites=true&w=majority&appName=practice"
+      process.env.DATABASE_URI
     );
     console.log("Connected to the database");
-    const PORT = 3000;
+    const PORT = process.env.PORT;
     app.listen(PORT, () => {
       console.log(`Server is running at port ${PORT}`);
     });
