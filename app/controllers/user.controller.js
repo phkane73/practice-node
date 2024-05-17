@@ -35,13 +35,13 @@ exports.update = async (req, res) => {
       { $set: req.body }
     );
     if (result) {
-      return res.send({
+      return res.status(200).send({
         message: "Updated user!",
         contentUpdate: req.body,
         result,
       });
     }
-    return res.send({ message: `No user name is :${username}` });
+    return res.status(404).send({ message: `No user name is :${username}` });
   } catch (error) {
     if (error.code === 11000) {
       return res
@@ -53,6 +53,11 @@ exports.update = async (req, res) => {
 
 exports.search = async (req, res) => {
   const searchParams = req.query;
+  const { project } = req.query;
+  if (project) {
+    const projects = typeof project === "string" ? [project] : project;
+    searchParams.project = { $all: projects };
+  }
   const user = await User.find(searchParams);
   return res.status(200).send(user);
 };
