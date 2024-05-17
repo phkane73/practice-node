@@ -1,25 +1,42 @@
 const User = require("../models/user.model");
 exports.insert = async (req, res) => {
-  const userExist = await User.findOne({ username: req.body.username });
-  if (userExist) {
-    return res.send({ message: "User is exist!" });
+  try {
+    const { username } = req.body;
+    const userExist = await User.findOne({ username });
+    if (userExist) {
+      return res.send({ message: "User is exist!" });
+    }
+    const user = new User(req.body);
+    await user.save();
+    return res.send({ message: "Insert user success!", user });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      res.send({ message: error.message });
+    }
   }
-  const user = new User(req.body);
-  await user.save();
-  return res.send(user);
 };
 
 exports.delete = async (req, res) => {
-  await User.findOneAndDelete({ username: req.params.username });
-  return res.send({ message: "Deleted user!" });
+  const { username } = req.params;
+  const result = await User.findOneAndDelete({ username });
+  if (result) {
+    return res.send({ message: `Deleted user have username :${username}` });
+  }
+  return res.send({ message: `No user name is :${username}` });
 };
 
 exports.update = async (req, res) => {
-  await User.findOneAndUpdate(
-    { username: req.params.username },
-    { $set: req.body }
-  );
-  return res.send({ message: "Updated user!" });
+  const { username } = req.params;
+  const result = await User.findOneAndUpdate({ username }, { $set: req.body });
+  console.log(result);
+  if (result) {
+    return res.send({
+      message: "Updated user!",
+      contentUpdate: req.body,
+      result,
+    });
+  }
+  return res.send({ message: `No user name is :${username}` });
 };
 
 exports.search = async (req, res) => {
