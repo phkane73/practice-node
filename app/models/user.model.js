@@ -4,7 +4,8 @@ const { ValidationError } = mongoose.Error;
 const userSchema = new Schema({
   username: {
     type: String,
-    required: [true, 'Username is required'],
+    required: [true, "Username is required"],
+    unique: [true, "Username is unique"],
   },
   fullname: {
     type: String,
