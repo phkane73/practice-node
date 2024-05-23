@@ -11,11 +11,9 @@ router(app);
 
 async function startServer() {
   try {
-    await mongoose.connect(
-      process.env.DATABASE_URI
-    );
+    await mongoose.connect(process.env.DATABASE_URI);
     console.log("Connected to the database");
-    const PORT = process.env.PORT;
+    const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
       console.log(`Server is running at port ${PORT}`);
     });
